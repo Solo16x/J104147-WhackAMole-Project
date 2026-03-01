@@ -1,0 +1,50 @@
+const holes = document.querySelectorAll('.hole');
+const scoreDisplay = document.querySelector('#score');
+const startBtn = document.querySelector('#start-btn');
+let score = 0;
+let lastHole;
+let timeUp = false;
+
+function randomTime(min, max) {
+    return Math.round(Math.random() * (max - min) + min);
+}
+
+function randomHole(holes) {
+    const idx = Math.floor(Math.random() * holes.length);
+    const hole = holes[idx];
+    if (hole === lastHole) return randomHole(holes);
+    lastHole = hole;
+    return hole;
+}
+
+function peep() {
+    const time = randomTime(500, 1000);
+    const hole = randomHole(holes);
+    hole.querySelector('.mole').classList.add('up');
+    setTimeout(() => {
+        hole.querySelector('.mole').classList.remove('up');
+        if (!timeUp) peep();
+    }, time);
+}
+
+function startGame() {
+    score = 0;
+    scoreDisplay.textContent = score;
+    timeUp = false;
+    peep();
+}
+
+function whack(e) {
+    if(!e.isTrusted) return;
+    score++;
+    this.querySelector('.mole').classList.remove('up');
+    scoreDisplay.textContent = score;
+    
+    if (score === 10) {
+        timeUp = true;
+        alert("YOU DID IT! You counted to 10!");
+    }
+}
+
+holes.forEach(hole => hole.addEventListener('click', whack));
+startBtn.addEventListener('click', startGame);
