@@ -18,11 +18,14 @@ function randomHole(holes) {
 }
 
 function peep() {
-    const time = randomTime(500, 1000);
+    const time = randomTime(600, 1200);
     const hole = randomHole(holes);
-    hole.querySelector('.mole').classList.add('up');
+    const mole = hole.querySelector('.mole');
+    
+    mole.classList.add('up');
+    
     setTimeout(() => {
-        hole.querySelector('.mole').classList.remove('up');
+        mole.classList.remove('up');
         if (!timeUp) peep();
     }, time);
 }
@@ -35,15 +38,20 @@ function startGame() {
 }
 
 function whack(e) {
-    if(!e.isTrusted) return; 
+    if (!e.isTrusted) return; 
     
-    // THE FIX: Check if the mole is actually "up" before counting
-    if (!this.querySelector('.mole').classList.contains('up')) return;
+    const mole = this.querySelector('.mole');
 
-    score++; 
-    this.querySelector('.mole').classList.remove('up');
+    if (!mole.classList.contains('up')) {
+        console.log("Clicked an empty hole - no point awarded.");
+        return; 
+    }
+
+    score++;
+    mole.classList.remove('up'); 
     scoreDisplay.textContent = score;
-    
+    console.log("Mole whacked! Current score: " + score);
+
     if (score === 10) {
         timeUp = true;
         alert("YOU DID IT! You counted to 10!");
