@@ -34,6 +34,11 @@ function startGame() {
     score = 0;
     scoreDisplay.textContent = score;
     timeUp = false;
+
+    startBtn.disabled = true; 
+    startBtn.style.opacity = "0.5";
+    startBtn.textContent = "Game in Progress...";
+
     peep();
 }
 
@@ -42,18 +47,19 @@ function whack(e) {
     
     const mole = this.querySelector('.mole');
 
-    if (!mole.classList.contains('up')) {
-        console.log("Clicked an empty hole - no point awarded.");
-        return; 
-    }
+    if (!mole.classList.contains('up')) return; 
 
     score++;
     mole.classList.remove('up'); 
     scoreDisplay.textContent = score;
-    console.log("Mole whacked! Current score: " + score);
 
     if (score === 10) {
         timeUp = true;
+        
+        startBtn.disabled = false;
+        startBtn.style.opacity = "1";
+        startBtn.textContent = "Start Game";
+        
         alert("YOU DID IT! You counted to 10!");
     }
 }
