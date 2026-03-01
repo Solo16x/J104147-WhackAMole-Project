@@ -35,8 +35,12 @@ function startGame() {
 }
 
 function whack(e) {
-    if(!e.isTrusted) return;
-    score++;
+    if(!e.isTrusted) return; 
+    
+    // THE FIX: Check if the mole is actually "up" before counting
+    if (!this.querySelector('.mole').classList.contains('up')) return;
+
+    score++; 
     this.querySelector('.mole').classList.remove('up');
     scoreDisplay.textContent = score;
     
